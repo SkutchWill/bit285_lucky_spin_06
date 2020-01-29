@@ -12,6 +12,7 @@ namespace LuckySpin.Models
         public int Luck { get; set; }
 
         [Display(Prompt = " Starting Balance $3 to $10")]
+        [Range(3,10, ErrorMessage = "Please enter a valid number")]
         public Decimal StartingBalance { get; set; }
 
         /*

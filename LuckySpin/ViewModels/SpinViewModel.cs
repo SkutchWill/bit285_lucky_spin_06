@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using LuckySpin.Models;
+
+namespace LuckySpin.ViewModels
+{
+    public class SpinViewModel
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
+        public decimal Balance { get; set; }
+        public bool IsWinning { get; set; }
+        public int Luck { get; set; }
+        public string FirstName { get; set; }        
+        public SpinViewModel()
+        {
+
+        }
+        public SpinViewModel(Player player)
+        {
+            this.Luck = player.Luck;
+            this.FirstName = player.FirstName;
+            this.Balance = player.StartingBalance;
+        }
+        
+    }
+}
