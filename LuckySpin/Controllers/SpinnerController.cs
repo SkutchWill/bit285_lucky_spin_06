@@ -10,7 +10,7 @@ namespace LuckySpin.Controllers
 {
     public class SpinnerController : Controller
     {
-        Random random;
+        
         Repository repository;
         
 
@@ -19,7 +19,7 @@ namespace LuckySpin.Controllers
          */
         public SpinnerController(Repository repository)
         {
-            random = new Random();
+            
             //TODO: Inject the Repository singleton
             this.repository = repository;
         }
@@ -29,8 +29,8 @@ namespace LuckySpin.Controllers
          **/
         [HttpGet]
         public IActionResult Index()
-        {
-                return View();
+        {            
+            return View();
         }
         [HttpPost]
         public IActionResult Index(Player player)
@@ -40,12 +40,13 @@ namespace LuckySpin.Controllers
             // TODO: Add the Player to the Repository
 
             // TODO: Build a new SpinItViewModel object with data from the Player and pass it to the View
-            repository.Player = indexViewModel.Player;
+
+            repository.Player = player;
+            repository.Player.Balance = player.StartingBalance;
             IndexViewModel indexViewModel = new IndexViewModel(player);
             indexViewModel.StartingBalance = player.StartingBalance;
             SpinViewModel Spinit = new SpinViewModel (player);
             Spinit.Balance = player.StartingBalance;
-
             return RedirectToAction("SpinIt", player); 
         }
 
@@ -56,33 +57,22 @@ namespace LuckySpin.Controllers
 
         {
             
-            {
-                Spinit.Balance = repository.Player.Balance;
-                Spinit.Luck = repository.Player.Luck;
-                Spinit.A = random.Next(1, 10);
-                Spinit.B = random.Next(1, 10);
-                Spinit.C = random.Next(1, 10);
-            };
 
-            Spinit.IsWinning = (Spinit.A == Spinit.Luck || Spinit.B == Spinit.Luck || Spinit.C == Spinit.Luck);
-            if (Spinit.IsWinning)
-            {
-                
-            }
-            else
-            {
-                
-            }
+            
             
             //Add to Spin Repository
-            repository.AddSpin(Spinit);
+            
+            
 
-            //TODO: Clean up ViewBag using a SpinIt ViewModel instead
-            ViewBag.ImgDisplay = (Spinit.IsWinning) ? "block" : "none";
-            ViewBag.FirstName = repository.Player.FirstName;
-            ViewBag.Balance = Spinit.Balance;
+            //TODO: Clean up ViewBag using a SpinIt ViewModel instead      
 
-            return View("SpinIt", Spinit);
+            if (repository.Player.ChargeSpin())
+            {
+                Spinit.Spin(repository);
+                repository.AddSpin(Spinit);
+                return View(Spinit.returnValue, Spinit);                
+            }
+            return RedirectToAction("LuckList", repository.PlayerSpins);
         }
 
         /***

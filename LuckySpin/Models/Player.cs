@@ -4,15 +4,9 @@ namespace LuckySpin.Models
 {
     public class Player
     {
-        [Display(Prompt = " Your First Name")]
-        [Required(ErrorMessage = "Please enter your Name", AllowEmptyStrings = false)]
-        public string FirstName { get; set; }
-
-        [Range(1, 9, ErrorMessage = "Choose a number")]
-        public int Luck { get; set; }
-
-        [Display(Prompt = " Starting Balance $3 to $10")]
-        [Range(3,10, ErrorMessage = "Please enter a valid number")]
+        
+        public string FirstName { get; set; }        
+        public int Luck { get; set; }        
         public Decimal StartingBalance { get; set; }
 
         /*
